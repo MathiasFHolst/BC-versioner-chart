@@ -105,7 +105,7 @@ sizeArray.reverse();
 
 /* Taking dates from data recieved and adding name of the month + 4 digit year number instead of full dateString */
 var sizeDateArray = [];
-for (let dateIndex = 0; dateIndex < datesMatchingSizeArray.length - 1; dateIndex++) {
+for (let dateIndex = 0; dateIndex < datesMatchingSizeArray.length; dateIndex++) {
   const date = new Date(`${datesMatchingSizeArray[dateIndex]}`);
   const month = date.toLocaleDateString("default", { month: "long" });
   const year = date.toLocaleDateString("default", { year: "numeric" });
@@ -121,12 +121,17 @@ const myChart = new Chart(ctx, {
     datasets: [
       {
         label: "",
-        borderColor: "rgb(7,1,100)",
+        borderColor: "rgb(0,0,100)",
         data: sizeArray,
       },
     ],
   },
   options: {
+    plugins: {
+      legend: {
+        display: false,
+      }
+    }
   },
 });
 
@@ -185,7 +190,7 @@ var dateArray = [
   "2022-01-01",
   "2022-02-01",
   "2022-03-22",
-];
+] 
 var versionsArray = [
   "9",
   "9",
@@ -241,11 +246,13 @@ var versionsArray = [
   "17.11.30469.0",
 ];
 
+
 /* Adds a copy of the Last version so the length matches dateArray when adding the string Today at the end */
 versionsArray.push(versionsArray[versionsArray.length-1])
 
 
 /* Removes all duplicates of recieved versions in versionsArray */
+
 var lengthOfArrayRecieved = dateArray.length;
 var removedDuplicates = [(testSet = new Set(versionsArray))];
 let arrayIndex = 0;
@@ -261,43 +268,82 @@ while (satisfied == false) {
     satisfied = true;
   }
 }
-/* Add extra index to DateArray for showing today at the end */
-dateArray.push(`Now`);
 
+/* Add extra index to DateArray for showing today at the end */
+/*
+dateArray.push(`Invalid`);
+console.table(dateArray);
 /* Sorts out the dates with Month names and Year matching in dateArray recieved */
+var testArray = [];
 var mdArrayVersionDate = [];
-var test = 0;
-for (let dateIndex = 0; dateIndex < dateArray.length-1; dateIndex++) {
-  const date = new Date(`${dateArray[dateIndex]}`);
-  const month = date.toLocaleDateString("default", { month: "long" });
-  const year = date.toLocaleDateString("default", { year: "numeric" });
-  const date2 = new Date(`${dateArray[dateIndex + 1]}`);
-  const month2 = date2.toLocaleDateString("default", { month: "long" });
-  const year2 = date2.toLocaleDateString("default", { year: "numeric" });
-  if(date2 == "Invalid Date"){
+var displayArray = []
+/*
+  testArray.push(0);
+  for (let index = 0; index < dateArray.length-1; index++) {
+    var temp = new Date(dateArray[index]);
+    testArray.push(temp.getTime())
+  }
+  testArray.push(new Date().getTime());
+  console.table(testArray);
+  var alpha = 0
+  var beta = 0;
+  var charlie = 0;
+  alpha = testArray[0]
+  for (let index = 0; index < dateArray.length; index++) {
+    if(dateArray.length-1 == index){
+    } else {
+      charlie = (testArray[index+2] - testArray[index+1]) / 1000 / 60 / 60 / 24;
+      beta += charlie
+      mdArrayVersionDate.push([alpha, beta])
+      alpha += charlie;  
+    }
+  }
+  */
+ var currentDate = new Date();
+ var currentDateStringFormat = currentDate.toISOString();
+ var currentDateArray = currentDateStringFormat.split('T');
+ var test = 0;
+ for (let dateIndex = 0; dateIndex < dateArray.length; dateIndex++) {
+   //const date = new Date(`${dateArray[dateIndex]}`);
+   //const month = date.toLocaleDateString("default", { month: "long" });
+   //const year = date.toLocaleDateString("default", { year: "numeric" });
+   //const date2 = new Date(`${dateArray[dateIndex + 1]}`);
+   //const month2 = date2.toLocaleDateString("default", { month: "long" });
+   //const year2 = date2.toLocaleDateString("default", { year: "numeric" });
+  if(dateArray[dateIndex+1] == null){
+    console.log("HEEYY")
     mdArrayVersionDate.push([
-      `${month + " - " + year}`,
-      `Today`,
+      `${dateArray[dateIndex]}`,
+      `${currentDateArray[0]}`,
     ]);
   } else {
     mdArrayVersionDate.push([
-      `${month + " - " + year}`,
-      `${month2 + " - " + year2}`,
+      `${dateArray[dateIndex]}`,
+      `${dateArray[dateIndex+1]}`,
     ]);
   }
 }
+console.table(mdArrayVersionDate);
 /* Initialize chart */
 const ctx2 = document.getElementById("myChart2");
 const myChart2 = new Chart(ctx2, {
   type: "bar",
   data: {
-    labels: versionsArray,
+  labels: versionsArray,
     datasets: [
       {
         label: "",
         borderColor: "rgb(30,144,255)",
         backgroundColor: ["red", "green", "blue"],
-        data: mdArrayVersionDate,
+        data: mdArrayVersionDate, 
+        /*[
+          https://www.youtube.com/watch?v=ti0-q5bjuhE
+          ['2017-12-27', '2019-10-01'],
+          ['2019-10-01', '2020-03-01'],
+          ['2020-03-01', '2020-10-01'],
+          ['2020-10-01', '2021-12-01'],
+          ['2021-12-01', '2022-03-01'],
+        ],*/
         datalabels: {
           color: "rgb(0,0,0)",
           formatter: function (value, context) {
@@ -309,13 +355,24 @@ const myChart2 = new Chart(ctx2, {
   },
   plugins: [ChartDataLabels],
   options: {
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
     indexAxis: "y",
     scales: {
       x: {
-        type: "category",
+        //type: "category",
+        type: "time",
+        time: {
+          unit: 'month',
+        },
         labels: [],
+        },
+      y: {
+
       },
-      y: {},
     },
   },
 });
