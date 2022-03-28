@@ -1,5 +1,6 @@
 /* CHART 1 */
 /* DATA */
+/*
 var datesMatchingSizeArray = [
   "2022-03-01",
   "2022-02-01",
@@ -89,30 +90,177 @@ var datesMatchingSizeArray = [
   "2015-02-01",
 ];
 var sizeArray = [
-  89.35, 89.35, 89.35, 89.35, 81.23, 81.23, 81.23, 81.23, 81.23, 73.85, 73.85,
-  73.85, 73.85, 73.85, 73.15, 73.15, 66.5, 66.5, 66.5, 66.5, 66.5, 60.46, 60.46,
-  60.46, 60.46, 54.96, 54.96, 54.96, 78.45, 72.82, 49.74, 68.43, 65.88, 45.0,
-  40.91, 40.91, 40.91, 54.23, 36.52, 34.81, 31.64, 31.64, 28.77, 26.15, 23.77,
-  23.77, 33.31, 20.69, 20.69, 17.1, 17.1, 16.24, 15.61, 14.19, 12.9, 11.85,
-  10.77, 16.09, 9.29, 8.18, 6.76, 8.49, 9.95, 4.7, 6.8, 6.18, 5.62, 4.26, 4.26,
-  6.03, 6.03, 7.08, 5.85, 3.27, 3.27, 3.03, 3.03, 3.03, 1.92, 1.75, 1.75, 1.59,
-  1.59, 1.44, 1.44, 0.29,
+  "89.35", 
+  "89.35", 
+  "89.35", 
+  "89.35", 
+  "81.23", 
+  "81.23", 
+  "81.23", 
+  "81.23", 
+  "81.23", 
+  "73.85", 
+  "73.85",
+  "73.85", 
+  "73.85", 
+  "73.85", 
+  "73.15", 
+  "66.5", 
+  "73.15", 
+  "66.5", 
+  "66.5", 
+  "66.5", 
+  "66.5", 
+  "60.46", 
+  "60.46",
+  "60.46", 
+  "60.46", 
+  "54.96", 
+  "54.96", 
+  "54.96", 
+  "78.45", 
+  "72.82", 
+  "49.74", 
+  "68.43", 
+  "65.88", 
+  "45.0",
+  "40.91", 
+  "40.91", 
+  "40.91", 
+  "54.23", 
+  "36.52", 
+  "34.81", 
+  "31.64", 
+  "31.64", 
+  "28.77", 
+  "26.15", 
+  "23.77",
+  "23.77", 
+  "33.31", 
+  "20.69", 
+  "20.69", 
+  "17.1", 
+  "17.1", 
+  "16.24", 
+  "15.61", 
+  "14.19", 
+  "12.9", 
+  "11.85",
+  "10.77", 
+  "16.09", 
+  "9.29", 
+  "8.18", 
+  "6.76", 
+  "8.49", 
+  "9.95", 
+  "4.7", 
+  "6.8", 
+  "6.18", 
+  "5.62", 
+  "4.26", 
+  "4.26",
+  "6.03", 
+  "6.03", 
+  "7.08", 
+  "5.85", 
+  "3.27", 
+  "3.27", 
+  "3.03", 
+  "3.03", 
+  "3.03", 
+  "1.92", 
+  "1.75", 
+  "1.75", 
+  "1.59",
+  "1.59", 
+  "1.44", 
+  "1.44", 
+  "0.29",
 ];
+*/
+async function fetchJSONsize() {
+  var response = await fetch("/size.json");
+  var jsonData = await response.json();
 
-/* Reverses both recieved arrays so we get the oldest data first */
+  jsonData.root.rec.reverse();
+
+  var sizeDateArray = [];
+  for (let dateIndex = 0; dateIndex < jsonData.root.rec.length; dateIndex++) {
+    const date = new Date(jsonData.root.rec[dateIndex].Date);
+    const month = date.toLocaleDateString(navigator.language, {
+      month: "long",
+    });
+    const year = date.toLocaleDateString("default", { year: "numeric" });
+    sizeDateArray.push([month + " - " + year]);
+  }
+
+  var sizeArray = [];
+  for (let index = 0; index < jsonData.root.rec.length; index++) {
+    sizeArray.push(jsonData.root.rec[index].Size);
+  }
+
+  const ctx = document.getElementById("myChart");
+  const myChart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: sizeDateArray,
+      datasets: [
+        {
+          label: "",
+          borderColor: "rgb(0,0,100)",
+          data: sizeArray,
+        },
+      ],
+    },
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: "(Custom Header)",
+          font: {
+            size: 28,
+          },
+        },
+        legend: {
+          display: false,
+        },
+        tooltip: {
+          titleAlign: "center",
+          yAlign: "bottom",
+          displayColors: false,
+          bodyAlign: "center",
+          callbacks: {
+            label: function (tooltipItem) {
+              return sizeArray[tooltipItem.dataIndex] + " GB";
+            },
+          },
+        },
+      },
+    },
+  });
+}
+
+fetchJSONsize();
+
+/* RUN GRAPH WITHOUT JSON
+// Reverses both recieved arrays so we get the oldest data first
 datesMatchingSizeArray.reverse();
 sizeArray.reverse();
 
-/* Taking dates from data recieved and adding name of the month + 4 digit year number instead of full dateString */
+// Taking dates from data recieved and adding name of the month + 4 digit year number instead of full dateString
 var sizeDateArray = [];
-for (let dateIndex = 0; dateIndex < datesMatchingSizeArray.length; dateIndex++) {
-  const date = new Date(`${datesMatchingSizeArray[dateIndex]}`);
-  const month = date.toLocaleDateString("default", { month: "long" });
+for (
+  let dateIndex = 0;
+  dateIndex < datesMatchingSizeArray.length;
+  dateIndex++
+) {
+  const date = new Date(datesMatchingSizeArray[dateIndex]);
+  const month = date.toLocaleDateString(navigator.language, { month: "long" });
   const year = date.toLocaleDateString("default", { year: "numeric" });
-  sizeDateArray.push([`${month + " - " + year}`]);
+  sizeDateArray.push([month + " - " + year]);
 }
 
-/* Initialize chart */
+// Initialize chart 
 const ctx = document.getElementById("myChart");
 const myChart = new Chart(ctx, {
   type: "line",
@@ -128,15 +276,35 @@ const myChart = new Chart(ctx, {
   },
   options: {
     plugins: {
+      title: {
+        display: true,
+        text: "(Custom Header)",
+        font: {
+          size: 28,
+        },
+      },
       legend: {
         display: false,
-      }
-    }
+      },
+      tooltip: {
+        titleAlign: "center",
+        yAlign: "bottom",
+        displayColors: false,
+        bodyAlign: "center",
+        callbacks: {
+          label: function (tooltipItem) {
+            return sizeArray[tooltipItem.dataIndex] + " GB";
+          },
+        },
+      },
+    },
   },
 });
+*/
 
 /* CHART 2 */
 /* DATA */
+/*
 var dateArray = [
   "2017-12-27",
   "2018-01-01",
@@ -190,7 +358,7 @@ var dateArray = [
   "2022-01-01",
   "2022-02-01",
   "2022-03-22",
-] 
+];
 var versionsArray = [
   "9",
   "9",
@@ -245,15 +413,141 @@ var versionsArray = [
   "16.9.20537.0",
   "17.11.30469.0",
 ];
+*/
+async function fetchJSONversions() {
+  var response = await fetch("/version.json");
+  var jsonData = await response.json();
 
+  var getLatestVersion =
+    jsonData.root.rec[jsonData.root.rec.length - 1].Version;
+  var getCurrentDateString = new Date().toISOString();
+  jsonData.root.rec.push({
+    Version: getLatestVersion,
+    Date: getCurrentDateString,
+  });
 
-/* Adds a copy of the Last version so the length matches dateArray when adding the string Today at the end */
-versionsArray.push(versionsArray[versionsArray.length-1])
+  // Remove version duplicates
+  var dates = [];
+  var versions = [];
+  for (let index = 0; index < jsonData.root.rec.length; index++) {
+    versions.push(jsonData.root.rec[index].Version);
+    dates.push(jsonData.root.rec[index].Date);
+  }
+  var removedDuplicates = [(trimmedSet = new Set(versions))];
+  let arrayIndex = 0;
+  let satisfied = false;
+  while (satisfied == false) {
+    if (versions[arrayIndex] == versions[arrayIndex + 1]) {
+      versions.splice(arrayIndex + 1, 1);
+      dates.splice(arrayIndex + 1, 1);
+    } else {
+      arrayIndex++;
+    }
+    if (trimmedSet.size == versions.length) {
+      satisfied = true;
+    }
+  }
+  //
 
+  // Get from and to date on Tooltipitem
+  var currentDate = new Date();
+  var currentDateStringFormat = currentDate.toISOString();
+  var currentDateArray = currentDateStringFormat.split("T");
+  // Insert dates and versions into two dimensional array
+  var mdArrayVersionDate = [];
+  for (let dateIndex = 0; dateIndex < dates.length; dateIndex++) {
+    if (dates[dateIndex + 1] == null) {
+      mdArrayVersionDate.push([
+        dates[dateIndex].split("T")[0],
+        currentDateArray[0],
+      ]);
+    } else {
+      mdArrayVersionDate.push([
+        dates[dateIndex].split("T")[0],
+        dates[dateIndex + 1].split("T")[0],
+      ]);
+    }
+  }
+  //
+  console.table(mdArrayVersionDate);
+  //
 
-/* Removes all duplicates of recieved versions in versionsArray */
+  // Sets the language of the chart data to the browsers language
+  moment.locale(navigator.language);
+  // Initialize chart
+  const ctx2 = document.getElementById("myChart2");
+  const myChart2 = new Chart(ctx2, {
+    type: "bar",
+    data: {
+      labels: versions,
+      datasets: [
+        {
+          label: "",
+          backgroundColor: ["red", "green", "blue"],
+          data: mdArrayVersionDate,
+          datalabels: {
+            color: "rgb(0,0,0)",
+            formatter: function (value, context) {
+              return context.chart.data.labels[context.dataIndex];
+            },
+          },
+        },
+      ],
+    },
+    plugins: [ChartDataLabels],
+    options: {
+      indexAxis: "y",
+      scales: {
+        x: {
+          type: "time",
+          time: {
+            unit: "month",
+          },
+          labels: [],
+        },
+        y: {},
+      },
+      plugins: {
+        title: {
+          display: true,
+          text: "(Custom Header)",
+          font: {
+            size: 28,
+          },
+        },
+        legend: {
+          display: false,
+        },
+        tooltip: {
+          titleAlign: "center",
+          xAlign: "bottom",
+          displayColors: false,
+          callbacks: {
+            title: function (tooltipItem) {
+              return "Version: " + versions[tooltipItem[0].dataIndex];
+            },
+            label: function (tooltipItem) {
+              return (
+                mdArrayVersionDate[tooltipItem.dataIndex][0] +
+                " - " +
+                mdArrayVersionDate[tooltipItem.dataIndex][1]
+              );
+            },
+          },
+        },
+      },
+    },
+  });
+}
 
-var lengthOfArrayRecieved = dateArray.length;
+fetchJSONversions();
+
+/*
+// Adds a copy of the Last version so the length matches dateArray when adding the string Today at the end
+versionsArray.push(versionsArray[versionsArray.length - 1]);
+
+// Removes all duplicates of recieved versions in versionsArray
+
 var removedDuplicates = [(testSet = new Set(versionsArray))];
 let arrayIndex = 0;
 let satisfied = false;
@@ -268,47 +562,36 @@ while (satisfied == false) {
     satisfied = true;
   }
 }
-var mdArrayVersionDate = [];
 
- var currentDate = new Date();
- var currentDateStringFormat = currentDate.toISOString();
- var currentDateArray = currentDateStringFormat.split('T');
- var test = 0;
- for (let dateIndex = 0; dateIndex < dateArray.length; dateIndex++) {
-  if(dateArray[dateIndex+1] == null){
-    console.log("HEEYY")
-    mdArrayVersionDate.push([
-      `${dateArray[dateIndex]}`,
-      `${currentDateArray[0]}`,
-    ]);
+// Get from and to date on Tooltipitem
+var currentDate = new Date();
+var currentDateStringFormat = currentDate.toISOString();
+var currentDateArray = currentDateStringFormat.split("T");
+// Insert dates and versions into two dimensional array
+var mdArrayVersionDate = [];
+for (let dateIndex = 0; dateIndex < dateArray.length; dateIndex++) {
+  if (dateArray[dateIndex + 1] == null) {
+    mdArrayVersionDate.push([dateArray[dateIndex], currentDateArray[0]]);
   } else {
-    mdArrayVersionDate.push([
-      `${dateArray[dateIndex]}`,
-      `${dateArray[dateIndex+1]}`,
-    ]);
+    mdArrayVersionDate.push([dateArray[dateIndex], dateArray[dateIndex + 1]]);
   }
 }
-console.table(mdArrayVersionDate);
-/* Initialize chart */
+
+console.table(mdArrayVersionDate)
+
+// Sets the language of the chart data to the browsers language
+moment.locale(navigator.language);
+// Initialize chart 
 const ctx2 = document.getElementById("myChart2");
 const myChart2 = new Chart(ctx2, {
   type: "bar",
   data: {
-  labels: versionsArray,
+    labels: versionsArray,
     datasets: [
       {
         label: "",
-        borderColor: "rgb(30,144,255)",
         backgroundColor: ["red", "green", "blue"],
-        data: mdArrayVersionDate, 
-        /*[
-          https://www.youtube.com/watch?v=ti0-q5bjuhE
-          ['2017-12-27', '2019-10-01'],
-          ['2019-10-01', '2020-03-01'],
-          ['2020-03-01', '2020-10-01'],
-          ['2020-10-01', '2021-12-01'],
-          ['2021-12-01', '2022-03-01'],
-        ],*/
+        data: mdArrayVersionDate,
         datalabels: {
           color: "rgb(0,0,0)",
           formatter: function (value, context) {
@@ -320,24 +603,46 @@ const myChart2 = new Chart(ctx2, {
   },
   plugins: [ChartDataLabels],
   options: {
-    plugins: {
-      legend: {
-        display: false,
-      },
-    },
     indexAxis: "y",
     scales: {
       x: {
-        //type: "category",
         type: "time",
         time: {
-          unit: 'month',
+          unit: "month",
         },
         labels: [],
+      },
+      y: {},
+    },
+    plugins: {
+      title: {
+        display: true,
+        text: "(Custom Header)",
+        font: {
+          size: 28,
         },
-      y: {
-
+      },
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        titleAlign: "center",
+        xAlign: "bottom",
+        displayColors: false,
+        callbacks: {
+          title: function (tooltipItem) {
+            return "Version: " + versionsArray[tooltipItem[0].dataIndex];
+          },
+          label: function (tooltipItem) {
+            return (
+              mdArrayVersionDate[tooltipItem.dataIndex][0] +
+              " - " +
+              mdArrayVersionDate[tooltipItem.dataIndex][1]
+            );
+          },
+        },
       },
     },
   },
 });
+*/
