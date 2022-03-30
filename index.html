@@ -10,11 +10,21 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js" integrity="sha512-LGXaggshOkD/at6PFNcp2V2unf9LzFq6LE+sChH7ceMTDP0g2kn6Vxwgg7wkPP7AAtX+lmPqPdxB47A0Nz0cMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-moment/1.0.0/chartjs-adapter-moment.min.js" integrity="sha512-oh5t+CdSBsaVVAvxcZKy3XJdP7ZbYUBSRCXDTVn0ODewMDDNnELsrG9eDm8rVZAQg7RsDD/8K3MjPAFB13o6eA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="data.json"></script>
+    <style>
+        #chartBox {
+            width: 50%;
+            height: 99vh;
+            float: left;
+        }
+    </style>
 </head>
 <body>
-    <canvas id="myChart"></canvas>
-    <canvas id="myChart2"></canvas>
+    <div id="chartBox">
+        <canvas id="myChart"></canvas>
+    </div>
+    <div id="chartBox">
+        <canvas id="myChart2"></canvas>
+    </div>
 </body>
 <script src="chart.js"></script>
 </html>

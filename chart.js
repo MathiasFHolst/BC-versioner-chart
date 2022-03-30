@@ -178,129 +178,190 @@ var sizeArray = [
   "0.29",
 ];
 */
-async function fetchJSONsize() {
-  var response = await fetch("/size.json");
-  var jsonData = await response.json();
 
-  jsonData.root.rec.reverse();
+//function createChart() {
+  async function fetchJSONsize() {
+    var response = await fetch("/size.json");
+    var jsonData = await response.json();
 
-  var sizeDateArray = [];
-  for (let dateIndex = 0; dateIndex < jsonData.root.rec.length; dateIndex++) {
-    const date = new Date(jsonData.root.rec[dateIndex].Date);
-    const month = date.toLocaleDateString(navigator.language, {
-      month: "long",
-    });
-    const year = date.toLocaleDateString("default", { year: "numeric" });
-    sizeDateArray.push([month + " - " + year]);
-  }
+    /*var jsonData = {
+      "root": {
+        "rec": [
+          { "Size": "89.35", "Date": "2022-03-01T00:00:00+01:00" },
+          { "Size": "89.35", "Date": "2022-02-01T00:00:00+01:00" },
+          { "Size": "89.35", "Date": "2022-01-01T00:00:00+01:00" },
+          { "Size": "89.35", "Date": "2021-12-01T00:00:00+01:00" },
+          { "Size": "81.23", "Date": "2021-11-01T00:00:00+01:00" },
+          { "Size": "81.23", "Date": "2021-10-01T00:00:00+02:00" },
+          { "Size": "81.23", "Date": "2021-09-01T00:00:00+02:00" },
+          { "Size": "81.23", "Date": "2021-08-01T00:00:00+02:00" },
+          { "Size": "81.23", "Date": "2021-07-01T00:00:00+02:00" },
+          { "Size": "73.85", "Date": "2021-06-01T00:00:00+02:00" },
+          { "Size": "73.85", "Date": "2021-05-01T00:00:00+02:00" },
+          { "Size": "73.85", "Date": "2021-04-01T00:00:00+02:00" },
+          { "Size": "73.85", "Date": "2021-03-01T00:00:00+01:00" },
+          { "Size": "73.85", "Date": "2021-02-01T00:00:00+01:00" },
+          { "Size": "73.15", "Date": "2021-01-01T00:00:00+01:00" },
+          { "Size": "73.15", "Date": "2020-12-01T00:00:00+01:00" },
+          { "Size": "66.50", "Date": "2020-11-01T00:00:00+01:00" },
+          { "Size": "66.50", "Date": "2020-10-01T00:00:00+02:00" },
+          { "Size": "66.50", "Date": "2020-09-01T00:00:00+02:00" },
+          { "Size": "66.50", "Date": "2020-08-01T00:00:00+02:00" },
+          { "Size": "66.50", "Date": "2020-07-01T00:00:00+02:00" },
+          { "Size": "60.46", "Date": "2020-06-01T00:00:00+02:00" },
+          { "Size": "60.46", "Date": "2020-05-01T00:00:00+02:00" },
+          { "Size": "60.46", "Date": "2020-04-01T00:00:00+02:00" },
+          { "Size": "60.46", "Date": "2020-03-01T00:00:00+01:00" },
+          { "Size": "54.96", "Date": "2020-02-01T00:00:00+01:00" },
+          { "Size": "54.96", "Date": "2020-01-01T00:00:00+01:00" },
+          { "Size": "54.96", "Date": "2019-12-01T00:00:00+01:00" },
+          { "Size": "78.45", "Date": "2019-11-01T00:00:00+01:00" },
+          { "Size": "72.82", "Date": "2019-10-01T00:00:00+02:00" },
+          { "Size": "49.74", "Date": "2019-09-01T00:00:00+02:00" },
+          { "Size": "68.43", "Date": "2019-08-01T00:00:00+02:00" },
+          { "Size": "65.88", "Date": "2019-07-01T00:00:00+02:00" },
+          { "Size": "45.00", "Date": "2019-06-01T00:00:00+02:00" },
+          { "Size": "40.91", "Date": "2019-05-01T00:00:00+02:00" },
+          { "Size": "40.91", "Date": "2019-04-01T00:00:00+02:00" },
+          { "Size": "40.91", "Date": "2019-03-01T00:00:00+01:00" },
+          { "Size": "54.23", "Date": "2019-02-01T00:00:00+01:00" },
+          { "Size": "36.52", "Date": "2019-01-01T00:00:00+01:00" },
+          { "Size": "34.81", "Date": "2018-12-01T00:00:00+01:00" },
+          { "Size": "31.64", "Date": "2018-11-01T00:00:00+01:00" },
+          { "Size": "31.64", "Date": "2018-10-01T00:00:00+02:00" },
+          { "Size": "28.77", "Date": "2018-09-01T00:00:00+02:00" },
+          { "Size": "26.15", "Date": "2018-08-01T00:00:00+02:00" },
+          { "Size": "23.77", "Date": "2018-07-01T00:00:00+02:00" },
+          { "Size": "23.77", "Date": "2018-06-01T00:00:00+02:00" },
+          { "Size": "33.31", "Date": "2018-05-01T00:00:00+02:00" },
+          { "Size": "20.69", "Date": "2018-04-01T00:00:00+02:00" },
+          { "Size": "20.69", "Date": "2018-03-01T00:00:00+01:00" },
+          { "Size": "17.10", "Date": "2018-02-01T00:00:00+01:00" },
+          { "Size": "17.10", "Date": "2018-01-01T00:00:00+01:00" },
+          { "Size": "16.24", "Date": "2017-12-01T00:00:00+01:00" },
+          { "Size": "15.61", "Date": "2017-11-01T00:00:00+01:00" },
+          { "Size": "14.19", "Date": "2017-10-01T00:00:00+02:00" },
+          { "Size": "12.90", "Date": "2017-09-01T00:00:00+02:00" },
+          { "Size": "11.85", "Date": "2017-08-01T00:00:00+02:00" },
+          { "Size": "10.77", "Date": "2017-07-01T00:00:00+02:00" },
+          { "Size": "16.09", "Date": "2017-06-01T00:00:00+02:00" },
+          { "Size": "9.29", "Date": "2017-05-01T00:00:00+02:00" },
+          { "Size": "8.18", "Date": "2017-04-01T00:00:00+02:00" },
+          { "Size": "6.76", "Date": "2017-03-01T00:00:00+01:00" },
+          { "Size": "8.49", "Date": "2017-02-01T00:00:00+01:00" },
+          { "Size": "9.95", "Date": "2017-01-01T00:00:00+01:00" },
+          { "Size": "4.70", "Date": "2016-12-01T00:00:00+01:00" },
+          { "Size": "6.80", "Date": "2016-11-01T00:00:00+01:00" },
+          { "Size": "6.18", "Date": "2016-10-01T00:00:00+02:00" },
+          { "Size": "5.62", "Date": "2016-09-01T00:00:00+02:00" },
+          { "Size": "4.26", "Date": "2016-08-01T00:00:00+02:00" },
+          { "Size": "4.26", "Date": "2016-07-01T00:00:00+02:00" },
+          { "Size": "6.03", "Date": "2016-06-01T00:00:00+02:00" },
+          { "Size": "6.03", "Date": "2016-05-01T00:00:00+02:00" },
+          { "Size": "7.08", "Date": "2016-04-01T00:00:00+02:00" },
+          { "Size": "5.85", "Date": "2016-03-01T00:00:00+01:00" },
+          { "Size": "3.27", "Date": "2016-02-01T00:00:00+01:00" },
+          { "Size": "3.27", "Date": "2016-01-01T00:00:00+01:00" },
+          { "Size": "3.03", "Date": "2015-12-01T00:00:00+01:00" },
+          { "Size": "3.03", "Date": "2015-11-01T00:00:00+01:00" },
+          { "Size": "3.03", "Date": "2015-10-01T00:00:00+02:00" },
+          { "Size": "1.92", "Date": "2015-09-01T00:00:00+02:00" },
+          { "Size": "1.75", "Date": "2015-08-01T00:00:00+02:00" },
+          { "Size": "1.75", "Date": "2015-07-01T00:00:00+02:00" },
+          { "Size": "1.59", "Date": "2015-06-01T00:00:00+02:00" },
+          { "Size": "1.59", "Date": "2015-05-01T00:00:00+02:00" },
+          { "Size": "1.44", "Date": "2015-04-01T00:00:00+02:00" },
+          { "Size": "1.44", "Date": "2015-03-01T00:00:00+01:00" },
+          { "Size": "0.29", "Date": "2015-02-01T00:00:00+01:00" }
+        ]
+      }
+    }
+    */
 
-  var sizeArray = [];
-  for (let index = 0; index < jsonData.root.rec.length; index++) {
-    sizeArray.push(jsonData.root.rec[index].Size);
-  }
+    jsonData.root.rec.reverse();
 
-  const ctx = document.getElementById("myChart");
-  const myChart = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: sizeDateArray,
-      datasets: [
-        {
-          label: "",
-          borderColor: "rgb(0,0,100)",
-          data: sizeArray,
-        },
-      ],
-    },
-    options: {
-      plugins: {
-        title: {
-          display: true,
-          text: "(Custom Header)",
-          font: {
-            size: 28,
+    var sizeDateArray = [];
+    for (let dateIndex = 0; dateIndex < jsonData.root.rec.length; dateIndex++) {
+      const date = new Date(jsonData.root.rec[dateIndex].Date);
+      const month = date.toLocaleDateString(navigator.language, {
+        month: "long",
+      });
+      const year = date.toLocaleDateString("default", { year: "numeric" });
+      sizeDateArray.push([month + " - " + year]);
+    }
+
+    var sizeArray = [];
+    for (let index = 0; index < jsonData.root.rec.length; index++) {
+      sizeArray.push(jsonData.root.rec[index].Size);
+    }
+
+    var customerDBMax = 100;
+    var alpha = 0;
+
+    const ctx = document.getElementById("myChart").getContext('2d');
+    const gradientBg = ctx.createLinearGradient(0,0,0,700);
+    gradientBg.addColorStop(0, 'skyblue');
+    gradientBg.addColorStop(1, 'lightgrey');
+    
+
+    const myChart = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: sizeDateArray,
+        datasets: [
+          {
+            label: "",
+            borderColor: "black",
+            data: sizeArray,
+            backgroundColor: gradientBg,
+            tension: 0.3,
+            fill: true,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          x: {
+          },
+          y: {
+            max: customerDBMax,
           },
         },
-        legend: {
-          display: false,
-        },
-        tooltip: {
-          titleAlign: "center",
-          yAlign: "bottom",
-          displayColors: false,
-          bodyAlign: "center",
-          callbacks: {
-            label: function (tooltipItem) {
-              return sizeArray[tooltipItem.dataIndex] + " GB";
+        maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: true,
+            text: "(Custom Header)",
+            font: {
+              size: 28,
+            },
+          },
+          legend: {
+            display: false,
+          },
+          tooltip: {
+            titleAlign: "center",
+            yAlign: "bottom",
+            displayColors: false,
+            bodyAlign: "left",
+            callbacks: {
+              label: function (tooltipItem) {
+                alpha = customerDBMax - sizeArray[tooltipItem.dataIndex];
+                if(customerDBMax != 0){
+                  return [sizeArray[tooltipItem.dataIndex] + " GB brugt", alpha.toFixed(2) + " GB tilbage"];
+                }
+                return sizeArray[tooltipItem.dataIndex] + " GB brugt";
+              },
             },
           },
         },
       },
-    },
-  });
-}
+    });
+  }
 
-fetchJSONsize();
+  fetchJSONsize();
 
-/* RUN GRAPH WITHOUT JSON
-// Reverses both recieved arrays so we get the oldest data first
-datesMatchingSizeArray.reverse();
-sizeArray.reverse();
-
-// Taking dates from data recieved and adding name of the month + 4 digit year number instead of full dateString
-var sizeDateArray = [];
-for (
-  let dateIndex = 0;
-  dateIndex < datesMatchingSizeArray.length;
-  dateIndex++
-) {
-  const date = new Date(datesMatchingSizeArray[dateIndex]);
-  const month = date.toLocaleDateString(navigator.language, { month: "long" });
-  const year = date.toLocaleDateString("default", { year: "numeric" });
-  sizeDateArray.push([month + " - " + year]);
-}
-
-// Initialize chart 
-const ctx = document.getElementById("myChart");
-const myChart = new Chart(ctx, {
-  type: "line",
-  data: {
-    labels: sizeDateArray,
-    datasets: [
-      {
-        label: "",
-        borderColor: "rgb(0,0,100)",
-        data: sizeArray,
-      },
-    ],
-  },
-  options: {
-    plugins: {
-      title: {
-        display: true,
-        text: "(Custom Header)",
-        font: {
-          size: 28,
-        },
-      },
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        titleAlign: "center",
-        yAlign: "bottom",
-        displayColors: false,
-        bodyAlign: "center",
-        callbacks: {
-          label: function (tooltipItem) {
-            return sizeArray[tooltipItem.dataIndex] + " GB";
-          },
-        },
-      },
-    },
-  },
-});
-*/
+//createChart();
 
 /* CHART 2 */
 /* DATA */
@@ -414,10 +475,12 @@ var versionsArray = [
   "17.11.30469.0",
 ];
 */
-async function fetchJSONversions() {
+async function fetchJSONversions(jsonData) {
+  
   var response = await fetch("/version.json");
   var jsonData = await response.json();
-
+  
+  
   var getLatestVersion =
     jsonData.root.rec[jsonData.root.rec.length - 1].Version;
   var getCurrentDateString = new Date().toISOString();
@@ -433,7 +496,7 @@ async function fetchJSONversions() {
     versions.push(jsonData.root.rec[index].Version);
     dates.push(jsonData.root.rec[index].Date);
   }
-  var removedDuplicates = [(trimmedSet = new Set(versions))];
+  var trimmedSet = new Set(versions);
   let arrayIndex = 0;
   let satisfied = false;
   while (satisfied == false) {
@@ -483,7 +546,7 @@ async function fetchJSONversions() {
       datasets: [
         {
           label: "",
-          backgroundColor: ["red", "green", "blue"],
+          backgroundColor: ["red", "forestgreen", "dodgerblue"],
           data: mdArrayVersionDate,
           datalabels: {
             color: "rgb(0,0,0)",
@@ -496,6 +559,7 @@ async function fetchJSONversions() {
     },
     plugins: [ChartDataLabels],
     options: {
+      maintainAspectRatio: false,
       indexAxis: "y",
       scales: {
         x: {
@@ -505,7 +569,8 @@ async function fetchJSONversions() {
           },
           labels: [],
         },
-        y: {},
+        y: {
+        },
       },
       plugins: {
         title: {
@@ -541,108 +606,3 @@ async function fetchJSONversions() {
 }
 
 fetchJSONversions();
-
-/*
-// Adds a copy of the Last version so the length matches dateArray when adding the string Today at the end
-versionsArray.push(versionsArray[versionsArray.length - 1]);
-
-// Removes all duplicates of recieved versions in versionsArray
-
-var removedDuplicates = [(testSet = new Set(versionsArray))];
-let arrayIndex = 0;
-let satisfied = false;
-while (satisfied == false) {
-  if (versionsArray[arrayIndex] == versionsArray[arrayIndex + 1]) {
-    versionsArray.splice(arrayIndex + 1, 1);
-    dateArray.splice(arrayIndex + 1, 1);
-  } else {
-    arrayIndex++;
-  }
-  if (testSet.size == versionsArray.length) {
-    satisfied = true;
-  }
-}
-
-// Get from and to date on Tooltipitem
-var currentDate = new Date();
-var currentDateStringFormat = currentDate.toISOString();
-var currentDateArray = currentDateStringFormat.split("T");
-// Insert dates and versions into two dimensional array
-var mdArrayVersionDate = [];
-for (let dateIndex = 0; dateIndex < dateArray.length; dateIndex++) {
-  if (dateArray[dateIndex + 1] == null) {
-    mdArrayVersionDate.push([dateArray[dateIndex], currentDateArray[0]]);
-  } else {
-    mdArrayVersionDate.push([dateArray[dateIndex], dateArray[dateIndex + 1]]);
-  }
-}
-
-console.table(mdArrayVersionDate)
-
-// Sets the language of the chart data to the browsers language
-moment.locale(navigator.language);
-// Initialize chart 
-const ctx2 = document.getElementById("myChart2");
-const myChart2 = new Chart(ctx2, {
-  type: "bar",
-  data: {
-    labels: versionsArray,
-    datasets: [
-      {
-        label: "",
-        backgroundColor: ["red", "green", "blue"],
-        data: mdArrayVersionDate,
-        datalabels: {
-          color: "rgb(0,0,0)",
-          formatter: function (value, context) {
-            return context.chart.data.labels[context.dataIndex];
-          },
-        },
-      },
-    ],
-  },
-  plugins: [ChartDataLabels],
-  options: {
-    indexAxis: "y",
-    scales: {
-      x: {
-        type: "time",
-        time: {
-          unit: "month",
-        },
-        labels: [],
-      },
-      y: {},
-    },
-    plugins: {
-      title: {
-        display: true,
-        text: "(Custom Header)",
-        font: {
-          size: 28,
-        },
-      },
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        titleAlign: "center",
-        xAlign: "bottom",
-        displayColors: false,
-        callbacks: {
-          title: function (tooltipItem) {
-            return "Version: " + versionsArray[tooltipItem[0].dataIndex];
-          },
-          label: function (tooltipItem) {
-            return (
-              mdArrayVersionDate[tooltipItem.dataIndex][0] +
-              " - " +
-              mdArrayVersionDate[tooltipItem.dataIndex][1]
-            );
-          },
-        },
-      },
-    },
-  },
-});
-*/
